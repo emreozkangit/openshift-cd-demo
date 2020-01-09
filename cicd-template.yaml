@@ -333,20 +333,37 @@ objects:
             HOSTNAME=$(oc get route jenkins -o template --template='{{.spec.host}}' | sed "s/jenkins-${CICD_NAMESPACE}.//g")
             GOGS_HOSTNAME="gogs-$CICD_NAMESPACE.$HOSTNAME"
 
+            # if [ "${EPHEMERAL}" == "true" ] ; then
+            #   oc new-app -f https://raw.githubusercontent.com/siamaksade/gogs-openshift-docker/master/openshift/gogs-template.yaml \
+            #       --param=GOGS_VERSION=0.11.34 \
+            #       --param=DATABASE_VERSION=9.6 \
+            #       --param=HOSTNAME=$GOGS_HOSTNAME \
+            #       --param=SKIP_TLS_VERIFY=true
+            # else
+            #   oc new-app -f https://raw.githubusercontent.com/siamaksade/gogs-openshift-docker/master/openshift/gogs-persistent-template.yaml \
+            #       --param=GOGS_VERSION=0.11.34 \
+            #       --param=DATABASE_VERSION=9.6 \
+            #       --param=HOSTNAME=$GOGS_HOSTNAME \
+            #       --param=SKIP_TLS_VERIFY=true
+            # fi
+            
             if [ "${EPHEMERAL}" == "true" ] ; then
-              oc new-app -f https://raw.githubusercontent.com/siamaksade/gogs-openshift-docker/master/openshift/gogs-template.yaml \
+              oc new-app -f  https://raw.githubusercontent.com/OpenShiftDemos/gogs-openshift-docker/master/openshift/gogs-template.yaml \
                   --param=GOGS_VERSION=0.11.34 \
                   --param=DATABASE_VERSION=9.6 \
                   --param=HOSTNAME=$GOGS_HOSTNAME \
                   --param=SKIP_TLS_VERIFY=true
             else
-              oc new-app -f https://raw.githubusercontent.com/siamaksade/gogs-openshift-docker/master/openshift/gogs-persistent-template.yaml \
+              oc new-app -f  https://raw.githubusercontent.com/OpenShiftDemos/gogs-openshift-docker/master/openshift/gogs-persistent-template.yaml \
                   --param=GOGS_VERSION=0.11.34 \
                   --param=DATABASE_VERSION=9.6 \
                   --param=HOSTNAME=$GOGS_HOSTNAME \
                   --param=SKIP_TLS_VERIFY=true
             fi
-            
+
+
+
+
             sleep 5
 
             if [ "${EPHEMERAL}" == "true" ] ; then
